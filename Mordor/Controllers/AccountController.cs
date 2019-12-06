@@ -45,6 +45,9 @@ namespace Mordor.Controllers
         {
             return View();
         }
+
+
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Register(RegisterUserModel model)

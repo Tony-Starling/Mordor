@@ -1,15 +1,19 @@
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
+using Microsoft.AspNetCore.Localization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Options;
 using Mordor.Models;
 
 namespace Mordor
@@ -24,16 +28,28 @@ namespace Mordor
 
         public void ConfigureServices(IServiceCollection services)
         {
-            string connection = Configuration.GetConnectionString("MysqlDatabase");
+            string connection = Configuration.GetConnectionString("SQLDatabase");
             services.AddDbContext<AppUserContext>(options => options.UseSqlServer(connection));
-
+            services.AddMvc()
+                .AddDataAnnotationsLocalization()
+                .AddViewLocalization(o => o.ResourcesPath = "Resources");
+            services.Configure<RequestLocalizationOptions>(options =>
+            {
+                var supportedCultures = new[]
+                {
+                    new CultureInfo("en"),
+                    new CultureInfo("ru")
+                };
+                options.DefaultRequestCulture = new RequestCulture("ru");
+                options.SupportedCultures = supportedCultures;
+                options.SupportedUICultures = supportedCultures;
+            });
             services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
                 .AddCookie(options =>
                 {
                     options.LoginPath = new Microsoft.AspNetCore.Http.PathString("/Account/Login");
                 });
             services.AddControllersWithViews();
-
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
@@ -47,6 +63,8 @@ namespace Mordor
                 app.UseExceptionHandler("/Home/Error");
                 app.UseHsts();
             }
+            var locOptions = app.ApplicationServices.GetService<IOptions<RequestLocalizationOptions>>();
+            app.UseRequestLocalization(locOptions.Value);
             app.UseHttpsRedirection();
             app.UseStaticFiles();
             app.UseRouting();
