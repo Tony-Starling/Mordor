@@ -13,26 +13,28 @@ namespace Mordor.Controllers
 {
     public class AccountController : Controller
     {
-        private AppUserContext db;
-        public AccountController(AppUserContext context)
+        private ApplicationContext db;
+        public AccountController(ApplicationContext context)
         {
             db = context;
         }
+
         [HttpGet]
         public IActionResult Login()
         {
             return View();
         }
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Login(LoginModel model)
         {
             if (ModelState.IsValid)
             {
-                AppUser user = await db.AppUsers.FirstOrDefaultAsync(u => u.Email == model.Email && u.Password == model.Password);
+                AppUser user = await db.AppUsers.FirstOrDefaultAsync(u => u.UserName == model.UserName && u.Password == model.Password);
                 if (user != null)
                 {
-                    await Authenticate(model.Email); 
+                    await Authenticate(model.UserName); 
 
                     return RedirectToAction("Index", "Home");
                 }
@@ -57,9 +59,9 @@ namespace Mordor.Controllers
                 AppUser user = await db.AppUsers.FirstOrDefaultAsync(u => u.Email == model.Email);
                 if (user == null)
                 {
-                    db.AppUsers.Add(new AppUser { Email = model.Email, Password = model.Password });
+                    db.AppUsers.Add(new AppUser { UserName=model.UserName, Email = model.Email, Password = model.Password });
                     await db.SaveChangesAsync();
-                    await Authenticate(model.Email);
+                    await Authenticate(model.UserName);
                     return RedirectToAction("Index", "Home");
                 }
                 else
@@ -68,13 +70,9 @@ namespace Mordor.Controllers
             return View(model);
         }
 
-        private async Task Authenticate(string userName)
+        private async Task Authenticate(string UserName)
         {
-            var claims = new List<Claim>
-            {
-                new Claim(ClaimsIdentity.DefaultNameClaimType, userName)
-            };
-            ClaimsIdentity id = new ClaimsIdentity(claims, "ApplicationCookie", ClaimsIdentity.DefaultNameClaimType, ClaimsIdentity.DefaultRoleClaimType);
+            ClaimsIdentity id = new ClaimsIdentity(GetUserClaims(UserName), "ApplicationCookie", ClaimsIdentity.DefaultNameClaimType, ClaimsIdentity.DefaultRoleClaimType);
             await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(id));
         }
 
@@ -83,5 +81,33 @@ namespace Mordor.Controllers
             await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
             return RedirectToAction("Login", "Account");
         }
+
+        public List<AppUserRole> GetUserRolesByUserName(string UserName)
+        {
+            var AppUsers = db.AppUsers.Where(x => x.UserName == UserName)
+               .Include(b => b.AppUserRole)
+               .ThenInclude(x => x.Role);
+            
+            return AppUsers.ToList()[0].AppUserRole;
+        }
+
+        public List<Claim> GetUserClaims(String UserName)
+        {
+            var claims = new List<Claim>
+            {
+                new Claim(ClaimsIdentity.DefaultNameClaimType, UserName)
+            };
+            foreach (AppUserRole Role in GetUserRolesByUserName(UserName))
+            {
+                claims.Add(new Claim(ClaimsIdentity.DefaultRoleClaimType, Role.Role.RoleName));
+            }
+            return claims;
+        }
+
+
+
+
+
     }
+
 }

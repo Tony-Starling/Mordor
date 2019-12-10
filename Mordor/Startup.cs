@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Localization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -28,11 +29,10 @@ namespace Mordor
 
         public void ConfigureServices(IServiceCollection services)
         {
-            string connection = Configuration.GetConnectionString("SQLDatabase");
-            services.AddDbContext<AppUserContext>(options => options.UseSqlServer(connection));
-            services.AddMvc()
-                .AddDataAnnotationsLocalization()
-                .AddViewLocalization(o => o.ResourcesPath = "Resources");
+            string connection = Configuration.GetConnectionString("SQLDatabase");   
+            services.AddDbContext<ApplicationContext>(options => options.UseSqlServer(connection));
+            services.AddLocalization(options => options.ResourcesPath = "Resources");
+
             services.Configure<RequestLocalizationOptions>(options =>
             {
                 var supportedCultures = new[]
@@ -48,8 +48,16 @@ namespace Mordor
                 .AddCookie(options =>
                 {
                     options.LoginPath = new Microsoft.AspNetCore.Http.PathString("/Account/Login");
+                  
                 });
+            services.AddAuthorization(options => {
+                //    options.AddPolicy("Roles", policy => {policy.RequireClaim("Role", "Admin");});
+                //    options.AddPolicy("Roles", policy => {policy.RequireClaim("Role", "Blocked");});
+            });
             services.AddControllersWithViews();
+            services.AddMvc()
+                .AddDataAnnotationsLocalization()
+                .AddViewLocalization(o => o.ResourcesPath = "Resources");
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)

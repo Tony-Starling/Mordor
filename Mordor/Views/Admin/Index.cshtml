@@ -1,0 +1,39 @@
+﻿@model Mordor.ViewModels.AdminPanelIndex
+@using Microsoft.AspNetCore.Mvc.Localization
+
+@inject IViewLocalizer Localizer
+@{
+    ViewData["Title"] = "Index";
+}
+
+    <div class="row">
+        <div class="col-sm-6">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">@Model.RegistredUserCount @Localizer["RegUsers"]</h5>
+                    <p class="card-text">@Localizer["UserListTitle"]</p>
+                    <a asp-action="UserList" asp-controller="Admin" class="btn btn-primary">@Localizer["UserList"]</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-6">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">@Model.PostsCount @Localizer["Posts"]</h5>
+                    <p class="card-text">@Localizer["PostListTitle"]</p>
+                    <a asp-action="UserList" asp-controller="Admin" class="btn btn-primary">@Localizer["PostList"]</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-6">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">@Model.SectionsCount @Localizer["Section"]</h5>
+                    <p class="card-text">@Localizer["SectionTitle"]</p>
+                    <a asp-action="UserList" asp-controller="Admin" class="btn btn-primary">@Localizer["SectionList"]</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+          

@@ -8,15 +8,18 @@ namespace Mordor.Models
 {
     public class RegisterUserModel
     {
-        [Required(ErrorMessage = "Не указан Email")]
+        [Required(ErrorMessage = "EmptyUserName")]
+        public string UserName { get; set; }
+
+        [Required(ErrorMessage = "EmptyEmail")]
         public string Email { get; set; }
 
-        [Required(ErrorMessage = "Не указан пароль")]
+        [Required(ErrorMessage = "EmptyPassword")]
         [DataType(DataType.Password)]
         public string Password { get; set; }
 
         [DataType(DataType.Password)]
-        [Compare("Password", ErrorMessage = "Пароль введен неверно")]
+        [Compare("Password", ErrorMessage = "PasswordsDoNotMatch")]
         public string ConfirmPassword { get; set; }
     }
 }

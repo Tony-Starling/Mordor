@@ -1,0 +1,32 @@
+﻿@model List<AppUser>
+@{
+    ViewBag.Title = "Details";
+}
+@foreach(AppUser user in Model)
+{ 
+<fieldset>
+    <legend>Информация о студенте</legend>
+
+    <div class="display-label"><b>Имя</b></div>
+    <div class="display-field">
+        @Html.DisplayFor(model => user.UserName)
+    </div>
+
+    <div class="display-label"><b>Фамилия</b></div>
+    <div class="display-field">
+        @Html.DisplayFor(model => user.Email)
+    </div>
+
+    <div class="display-label"><b>Курсы</b></div>
+    <ul>
+        @if (user.AppUserRole != null)
+        {
+            foreach (AppUserRole c in user.AppUserRole)
+            {
+                <li>@c.Role.RoleName</li>
+            }
+        }
+    </ul>
+
+</fieldset>
+}

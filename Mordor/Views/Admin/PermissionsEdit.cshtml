@@ -1,0 +1,53 @@
+﻿@model Mordor.ViewModels.PermissionsEdit
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<h1>PermEdit</h1>
+
+<div>
+    <h4>@Model.User.UserName</h4>
+    <hr />
+    @using (Html.BeginForm("PermissionsSetRoles", "Admin", FormMethod.Post))
+    {
+        <table>
+            <thead>
+                <tr>
+                    <th>
+                        <s>Select</s>
+                    </th>
+                    <th>
+                        <s>PermName</s>
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+
+                @foreach (Role role in Model.AllRoles)
+                {
+                    <tr>
+                        @if (Model.User.AppUserRole.Find(r => r.RoleId == role.Id) != null)
+                        {
+                            <td><input type="checkbox" name="RoleAcceptId" value="@role.Id" checked="checked" class="custom-control custom-checkbox" /></td>
+                        }
+                        else
+                        {
+                            <td><input type="checkbox" name="RoleAcceptId" value="@role.Id" class="custom-control custom-checkbox" /></td>
+                        }
+
+                        <td>@role.RoleName</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+
+        <div>
+            <input asp-action="PermissionsSetRoles" asp-route-id="@Model.User.Id" value="Apply" type="submit" class="btn btn-sm btn-primary">
+            <input asp-route="UserList" class="btn btn-sm btn-primary" value="Back to List" type="button">
+        </div>
+    }
+</div>
+
+
+
