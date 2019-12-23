@@ -138,10 +138,13 @@
   <data name="Logout" xml:space="preserve">
     <value>Выйти</value>
   </data>
+  <data name="Posts" xml:space="preserve">
+    <value>Мои посты</value>
+  </data>
+  <data name="PostsTitle" xml:space="preserve">
+    <value>Открыть Список ваших постов</value>
+  </data>
   <data name="Register" xml:space="preserve">
     <value>Зарегестрироваться</value>
-  </data>
-  <data name="Settings" xml:space="preserve">
-    <value>Настройки</value>
   </data>
 </root>

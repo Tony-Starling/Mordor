@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -11,6 +12,7 @@ using Mordor.ViewModels;
 
 namespace Mordor.Controllers
 {
+    [Authorize(Roles = "Admin")]
     public class AdminController : Controller
     {
         private readonly ApplicationContext _context;
@@ -19,6 +21,7 @@ namespace Mordor.Controllers
         {
             _context = context;
         }
+
 
         [HttpGet]
         public IActionResult Index()
@@ -171,7 +174,6 @@ namespace Mordor.Controllers
             return View(appUser);
         }
 
-        // POST: Admin/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)

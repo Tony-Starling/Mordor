@@ -55,6 +55,10 @@ namespace Mordor.Controllers
         [HttpPost]
         public IActionResult FullTextSearch(string SearchText)
         {
+            if (String.IsNullOrEmpty(SearchText))
+            {
+                return View();
+            }
             IEnumerable<Post> posts = database.SearchPosts(SearchText).Result;
             return View(posts);
         }

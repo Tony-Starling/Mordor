@@ -132,8 +132,17 @@
   <data name="Login" xml:space="preserve">
     <value>Sign in</value>
   </data>
+  <data name="LoginDropDown" xml:space="preserve">
+    <value>Autorization</value>
+  </data>
   <data name="Logout" xml:space="preserve">
     <value>Sign Out</value>
+  </data>
+  <data name="Posts" xml:space="preserve">
+    <value>My Posts</value>
+  </data>
+  <data name="PostsTitle" xml:space="preserve">
+    <value>Open list of Posts</value>
   </data>
   <data name="Register" xml:space="preserve">
     <value>Register</value>

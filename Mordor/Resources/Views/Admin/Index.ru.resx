@@ -129,6 +129,15 @@
   <data name="RegUsers" xml:space="preserve">
     <value>Зарегестрированных пользователей</value>
   </data>
+  <data name="Section" xml:space="preserve">
+    <value>Созданых разделов</value>
+  </data>
+  <data name="SectionList" xml:space="preserve">
+    <value>Открыть список Разделов</value>
+  </data>
+  <data name="SectionTitle" xml:space="preserve">
+    <value>Управление разделами</value>
+  </data>
   <data name="UserList" xml:space="preserve">
     <value>Открыть список пользователей</value>
   </data>

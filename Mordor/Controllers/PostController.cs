@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -26,6 +27,7 @@ namespace Mordor.Controllers
 
         }
 
+        [Authorize]
         public async Task<IActionResult> Index(string UserName)
         {
             int Id = database.GetUserByUserName(UserName).Id;
@@ -43,17 +45,22 @@ namespace Mordor.Controllers
             }
             else
             {
-                ViewBag.Chapterid = post.PostChapters.First().Id;
+                if (post.PostChapters.Count>0)
+                {
+                    ViewBag.Chapterid = post.PostChapters.First().Id;
+                }
             }
             return View(post);
         }
 
+        [Authorize]
         public IActionResult Create()
         {
             ViewBag.Sections = new SelectList(database.GetSectionsListAsync().Result, "Id", "SectionName");
             return View();
         }
 
+        [Authorize]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(Post post, int SectionId)
@@ -69,7 +76,8 @@ namespace Mordor.Controllers
             }
             return View(post);
         }
-        
+
+        [Authorize]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -86,19 +94,22 @@ namespace Mordor.Controllers
             return View(post);
         }
 
+        [Authorize]
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Title,Tags,Published,DateTime")] Post post)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Title,Tags,ImageUrl,Published,DateTime")] Post post, int SectionId)
         {
+           
+            
             if (id != post.Id)
             {
                 return NotFound();
             }
-
             if (ModelState.IsValid)
             {
                 try
                 {
+                    post.SectionId = SectionId;
                     database.Update(post);
                     await database.SaveChangesAsync();
                 }
@@ -113,12 +124,12 @@ namespace Mordor.Controllers
                         throw;
                     }
                 }
-                return RedirectToAction(nameof(Index));
+                return Redirect(Request.Headers["Referer"].ToString());
             }
             return View(post);
         }
 
-        // GET: Post/Delete/5
+        [Authorize]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -136,7 +147,7 @@ namespace Mordor.Controllers
             return View(post);
         }
 
-        // POST: Post/Delete/5
+        [Authorize]
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)

@@ -41,6 +41,7 @@
                 <input asp-for="DateTime" class="form-control" type="date" />
                 <span asp-validation-for="DateTime" class="text-danger"></span>
             </div>
+            <input asp-for="SectionId" class="form-control" type="hidden" value="@Model.SectionId" />
             <div class="form-group">
                 <input type="submit" value="Save" class="btn btn-primary" />
             </div>

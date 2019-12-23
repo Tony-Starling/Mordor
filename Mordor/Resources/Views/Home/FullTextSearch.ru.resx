@@ -117,31 +117,10 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="PostList" xml:space="preserve">
-    <value>Open posts list</value>
+  <data name="NoResults" xml:space="preserve">
+    <value>Нет рузультатов удовлетворяющих поиску.</value>
   </data>
-  <data name="PostListTitle" xml:space="preserve">
-    <value>You can view a list of all articles and search</value>
-  </data>
-  <data name="Posts" xml:space="preserve">
-    <value>Written posts</value>
-  </data>
-  <data name="RegUsers" xml:space="preserve">
-    <value>Registered users</value>
-  </data>
-  <data name="Section" xml:space="preserve">
-    <value>Created sections</value>
-  </data>
-  <data name="SectionList" xml:space="preserve">
-    <value>Open list of sectuions</value>
-  </data>
-  <data name="SectionTitle" xml:space="preserve">
-    <value>Go to section manager</value>
-  </data>
-  <data name="UserList" xml:space="preserve">
-    <value>Open list of users</value>
-  </data>
-  <data name="UserListTitle" xml:space="preserve">
-    <value>Edit permissions through the user list</value>
+  <data name="Read" xml:space="preserve">
+    <value>Читать ...</value>
   </data>
 </root>

@@ -51,8 +51,9 @@ namespace Mordor
                     options.LoginPath = new Microsoft.AspNetCore.Http.PathString("/Account/Login");
                 });
             services.AddAuthorization(options => {
-                //    options.AddPolicy("Roles", policy => {policy.RequireClaim("Role", "Admin");});
-                //    options.AddPolicy("Roles", policy => {policy.RequireClaim("Role", "Blocked");});
+
+                options.AddPolicy("Roles", policy => { policy.RequireClaim("Role", "Admin"); });
+                options.AddPolicy("Roles", policy => { policy.RequireClaim("Role", "Blocked"); });
             });
             services.AddControllersWithViews();
             services.AddMarkdown();

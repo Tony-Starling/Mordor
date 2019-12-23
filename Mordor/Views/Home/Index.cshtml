@@ -1,9 +1,8 @@
 ﻿@model IEnumerable<Mordor.Models.Post>
 
-@{
-    ViewData["Title"] = "Home Page";
-}
+@using Microsoft.AspNetCore.Mvc.Localization
 
+@inject IViewLocalizer Localizer
 <div class="row">
     @foreach (Post Element in Model)
     {
@@ -31,7 +30,7 @@
                             <p class="card-text">@Element.Description</p>
                         }
                     }
-                    <a asp-action="Read" asp-controller="Post" asp-route-PostId="@Element.Id" class="btn btn-primary">Read</a>
+                    <a asp-action="Read" asp-controller="Post" asp-route-PostId="@Element.Id" class="btn btn-primary">@Localizer["Read"]</a>
                 </div>
                 <ul class="list-group list-group-flush">
                     <li class="list-group-item">@Element.AppUser.UserName</li>

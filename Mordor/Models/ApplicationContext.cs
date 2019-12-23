@@ -28,6 +28,7 @@ namespace Mordor.Models
             Database.EnsureCreated();
 
         }
+
         /// <summary>
         /// Override this method to further configure the model that was discovered by convention from the entity types
         /// exposed in <see cref="T:Microsoft.EntityFrameworkCore.DbSet`1"/> properties on your derived context. The resulting model may be cached
@@ -45,18 +46,14 @@ namespace Mordor.Models
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             CreateDefaultRoles(modelBuilder);
-
             base.OnModelCreating(modelBuilder);
             modelBuilder.Entity<AppUser>().Property(p => p.Id).ValueGeneratedOnAdd();
             CreateUsers_RolesRelationship(modelBuilder);
             CreatePost_ChapterRelationship(modelBuilder);
-            CreatePost_SectionRelationship(modelBuilder);
-
-
-
+            CreatePost_Section_AppuserRelationship(modelBuilder);
         }
 
-        private void CreatePost_SectionRelationship(ModelBuilder modelBuilder)
+        private void CreatePost_Section_AppuserRelationship(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Section>()
                 .HasMany(r => r.Posts)
@@ -150,6 +147,7 @@ namespace Mordor.Models
               .ThenInclude(x => x.Role).ToListAsync();
             return Users;
         }
+
         /// <summary>Gets the sections list asynchronous.</summary>
         /// <returns></returns>
         public async Task<List<Section>> GetSectionsListAsync()
@@ -187,6 +185,7 @@ namespace Mordor.Models
                .FirstOrDefaultAsync(m => m.Id == id);
             return Post;
         }
+
         /// <summary>Gets the section by identifier asynchronous.</summary>
         /// <param name="id">The identifier.</param>
         /// <returns></returns>
@@ -217,6 +216,9 @@ namespace Mordor.Models
 
             return PostList;
         }
+        /// <summary>Searches the posts.</summary>
+        /// <param name="SearchText">The search text.</param>
+        /// <returns></returns>
         public async Task<IEnumerable<Post>> SearchPosts(string SearchText)
         {
             List<Post> ListPosts = SearchInPosts(SearchText);
@@ -225,6 +227,9 @@ namespace Mordor.Models
             return (ulist);
         }
 
+        /// <summary>Searches the in posts.</summary>
+        /// <param name="SearchText">The search text.</param>
+        /// <returns></returns>
         private List<Post> SearchInPosts(string SearchText)
         {
              List<Post> PostList = Posts.Include(c => c.AppUser).Include(c => c.PostChapters)
@@ -235,6 +240,9 @@ namespace Mordor.Models
                ).ToList();
             return PostList;
         }
+        /// <summary>Searches the in chapters.</summary>
+        /// <param name="SearchText">The search text.</param>
+        /// <returns></returns>
         private List<Post> SearchInChapters(string SearchText)
         {
             List<Post> Answerlist = new List<Post>();

@@ -1,43 +1,52 @@
 ﻿@model IEnumerable<Mordor.Models.Post>
+@using Microsoft.AspNetCore.Mvc.Localization
 
-@{
-    ViewData["Title"] = "Home Page";
+@inject IViewLocalizer Localizer
+@if (Model == null)
+{
+    <h1>@Localizer["NoResults"]</h1>
 }
-
-<div class="row">
-    @foreach (Post Element in Model)
-    {
-        <div class="col-md-4">
-            <div class="card">
-                @if (Element.ImageUrl == null)
-                {
-                    <img src="~/Image/no-image-icon.png" class="card-img-top">
-                }
-                else
-                {
-                    <img src="@Element.ImageUrl" class="card-img-top">
-                }
-
-                <div class="card-body">
-                    <h5 class="card-title">@Element.Title</h5>
-                    @if (Element.Description != null)
+else if (Model.Count() == 0)
+{
+    <h1>@Localizer["NoResults"]</h1>
+}
+else
+{
+    <div class="row">
+        @foreach (Post Element in Model)
+        {
+            <div class="col-md-4">
+                <div class="card">
+                    @if (Element.ImageUrl == null)
                     {
-                        @if (Element.Description.Length > 70)
-                        {
-                            <p class="card-text">@Element.Description.Substring(0, 70) ...</p>
-                        }
-                        else
-                        {
-                            <p class="card-text">@Element.Description</p>
-                        }
+                        <img src="~/Image/no-image-icon.png" class="card-img-top">
                     }
-                    <a asp-action="Read" asp-controller="Post" asp-route-PostId="@Element.Id" class="btn btn-primary">Read</a>
+                    else
+                    {
+                        <img src="@Element.ImageUrl" class="card-img-top">
+                    }
+
+                    <div class="card-body">
+                        <h5 class="card-title">@Element.Title</h5>
+                        @if (Element.Description != null)
+                        {
+                            @if (Element.Description.Length > 70)
+                            {
+                                <p class="card-text">@Element.Description.Substring(0, 70) ...</p>
+                            }
+                            else
+                            {
+                                <p class="card-text">@Element.Description</p>
+                            }
+                        }
+                    <a asp-action="Read" asp-controller="Post" asp-route-PostId="@Element.Id" class="btn btn-primary">@Localizer["Read"]</a>
+                    </div>
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item">@Element.AppUser.UserName</li>
+                        <li class="list-group-item">@Element.DateTime.Date.Day,@Element.DateTime.Date.Month,@Element.DateTime.Date.Year </li>
+                    </ul>
                 </div>
-                <ul class="list-group list-group-flush">
-                    <li class="list-group-item">@Element.AppUser.UserName</li>
-                    <li class="list-group-item">@Element.DateTime.Date.Day,@Element.DateTime.Date.Month,@Element.DateTime.Date.Year </li>
-                </ul>
             </div>
-        </div>
-    }
-</div>
+        }
+    </div>
+}
