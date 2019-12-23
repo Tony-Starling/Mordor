@@ -13,7 +13,7 @@ namespace Mordor.Controllers
 {
     public class AccountController : Controller
     {
-        private ApplicationContext db;
+        private readonly ApplicationContext db;
         public AccountController(ApplicationContext context)
         {
             db = context;
@@ -82,7 +82,7 @@ namespace Mordor.Controllers
             return RedirectToAction("Login", "Account");
         }
 
-        public List<AppUserRole> GetUserRolesByUserName(string UserName)
+        public ICollection<AppUserRole> GetUserRolesByUserName(string UserName)
         {
             var AppUsers = db.AppUsers.Where(x => x.UserName == UserName)
                .Include(b => b.AppUserRole)

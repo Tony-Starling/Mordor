@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Localization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Mordor.Models;
 
@@ -15,14 +16,18 @@ namespace Mordor.Controllers
     {
         private readonly ILogger<HomeController> _logger;
 
-        public HomeController(ILogger<HomeController> logger)
+        private readonly ApplicationContext database;
+
+        public HomeController(ILogger<HomeController> logger, ApplicationContext DataBase)
         {
             _logger = logger;
+            database = DataBase;
         }
 
         public IActionResult Index()
         {
-            return View();
+            IEnumerable<Post> posts = database.GetPublishedPosts().Result;
+            return View(posts);
         }
 
         public IActionResult Privacy()
@@ -46,5 +51,14 @@ namespace Mordor.Controllers
             );
             return LocalRedirect(returnUrl);
         }
+
+        [HttpPost]
+        public IActionResult FullTextSearch(string SearchText)
+        {
+            IEnumerable<Post> posts = database.SearchPosts(SearchText).Result;
+            return View(posts);
+        }
+
+
     }
 }

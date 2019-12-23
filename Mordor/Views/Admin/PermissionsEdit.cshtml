@@ -27,7 +27,7 @@
                 @foreach (Role role in Model.AllRoles)
                 {
                     <tr>
-                        @if (Model.User.AppUserRole.Find(r => r.RoleId == role.Id) != null)
+                        @if (Model.User.AppUserRole.FirstOrDefault(r => r.RoleId == role.Id) != null)
                         {
                             <td><input type="checkbox" name="RoleAcceptId" value="@role.Id" checked="checked" class="custom-control custom-checkbox" /></td>
                         }

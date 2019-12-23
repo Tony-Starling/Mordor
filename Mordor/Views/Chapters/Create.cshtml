@@ -1,0 +1,69 @@
+﻿@model Mordor.Models.Chapter
+
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Create">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="Head" class="control-label"></label>
+                <input asp-for="Head" class="form-control" />
+                <span asp-validation-for="Head" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ImageUrl" class="control-label"></label>
+                <link rel="stylesheet" href="~/css/DragAndDrop.css" />
+                <div id="dropArea">
+                    <img id="DropImage" src="~/Image/upload-png--1369.png" />
+                </div>
+                <input asp-for="ImageUrl" class="form-control" id="IMGURL" type="hidden" />
+            </div>
+            <div class="form-group">
+                <label asp-for="Text" class="control-label"></label>
+                <textarea id="TextArea" asp-for="Text" class="form-control" data-provide="markdown"></textarea>
+                <span asp-validation-for="Text" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Create" asp-route-PostId="@ViewBag.PostId" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+
+
+@section Scripts{
+    <script src="~/js/jquery.filedrop.js"></script>
+    <script src="~/js/bootstrap-markdown.js"></script>
+    <script type="text/javascript">
+        $(function () {
+            $('#dropArea').filedrop({
+                url: '@Url.Action("UploadFiles")',
+                allowedfiletypes: ['image/jpeg', 'image/png', 'image/gif'],
+                allowedfileextensions: ['.jpg', '.jpeg', '.png', '.gif'],
+                paramname: 'files',
+                maxfiles: 1,
+                maxfilesize: 4,
+                dragOver: function () {
+                    $('#dropArea').addClass('active-drop');
+                },
+                dragLeave: function () {
+                    $('#dropArea').removeClass('active-drop');
+                },
+                drop: function () {
+                    $('#dropArea').removeClass('active-drop');
+                },
+                afterAll: function (e) {
+                },
+                uploadFinished: function (i, file, response, time) {
+                    $('#uploadList').append('<li class="list-group-item">' + file.name + '</li>');
+                    $('#DropImage').attr("src", response);
+                    $('#IMGURL').val(response);
+
+                }
+            })
+        })
+        $("#TextArea").markdown({autofocus:false,savable:false})
+    </script>
+}
+

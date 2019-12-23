@@ -16,6 +16,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Options;
 using Mordor.Models;
+using Westwind.AspNetCore.Markdown;
 
 namespace Mordor
 {
@@ -32,7 +33,7 @@ namespace Mordor
             string connection = Configuration.GetConnectionString("SQLDatabase");   
             services.AddDbContext<ApplicationContext>(options => options.UseSqlServer(connection));
             services.AddLocalization(options => options.ResourcesPath = "Resources");
-
+            services.AddTransient<CloudService>();
             services.Configure<RequestLocalizationOptions>(options =>
             {
                 var supportedCultures = new[]
@@ -48,16 +49,19 @@ namespace Mordor
                 .AddCookie(options =>
                 {
                     options.LoginPath = new Microsoft.AspNetCore.Http.PathString("/Account/Login");
-                  
                 });
             services.AddAuthorization(options => {
                 //    options.AddPolicy("Roles", policy => {policy.RequireClaim("Role", "Admin");});
                 //    options.AddPolicy("Roles", policy => {policy.RequireClaim("Role", "Blocked");});
             });
             services.AddControllersWithViews();
+            services.AddMarkdown();
+
+
             services.AddMvc()
                 .AddDataAnnotationsLocalization()
-                .AddViewLocalization(o => o.ResourcesPath = "Resources");
+                .AddViewLocalization(o => o.ResourcesPath = "Resources")
+                .AddApplicationPart(typeof(MarkdownPageProcessorMiddleware).Assembly); 
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
@@ -71,6 +75,12 @@ namespace Mordor
                 app.UseExceptionHandler("/Home/Error");
                 app.UseHsts();
             }
+            app.UseDefaultFiles(new DefaultFilesOptions()
+            {
+                DefaultFileNames = new List<string> { "index.md", "index.html" }
+            });
+
+            app.UseMarkdown();
             var locOptions = app.ApplicationServices.GetService<IOptions<RequestLocalizationOptions>>();
             app.UseRequestLocalization(locOptions.Value);
             app.UseHttpsRedirection();
@@ -83,7 +93,9 @@ namespace Mordor
                 endpoints.MapControllerRoute(
                     name: "default",
                     pattern: "{controller=Home}/{action=Index}/{id?}");
+                endpoints.MapDefaultControllerRoute();
             });
         }
     }
 }
+

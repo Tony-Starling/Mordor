@@ -120,7 +120,7 @@
   <data name="EmptyPassword" xml:space="preserve">
     <value>Вы не ввели пароль</value>
   </data>
-  <data name="UserName" xml:space="preserve">
+  <data name="EmptyUserName" xml:space="preserve">
     <value>Вы не ввели имя пользователя</value>
   </data>
 </root>

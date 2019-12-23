@@ -132,10 +132,16 @@
   <data name="Login" xml:space="preserve">
     <value>Войти</value>
   </data>
+  <data name="LoginDropDown" xml:space="preserve">
+    <value>Авторизация</value>
+  </data>
   <data name="Logout" xml:space="preserve">
     <value>Выйти</value>
   </data>
   <data name="Register" xml:space="preserve">
     <value>Зарегестрироваться</value>
+  </data>
+  <data name="Settings" xml:space="preserve">
+    <value>Настройки</value>
   </data>
 </root>

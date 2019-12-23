@@ -1,0 +1,22 @@
+﻿#dropArea {
+    background: #b5b5b536;
+    border: black dashed 1px;
+    text-align: center;
+    color: #fff;
+}
+
+.active-drop {
+    background: #77bafa !important;
+    border: solid 2px blue !important;
+    opacity: .5;
+    color: black !important;
+}
+#DropImage {
+    width: auto;
+    max-height: 50px;
+    -webkit-user-drag: none;
+    -khtml-user-drag: none;
+    -moz-user-drag: none;
+    -o-user-drag: none;
+    user-drag: none;
+}

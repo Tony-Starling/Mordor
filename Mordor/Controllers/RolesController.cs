@@ -13,14 +13,14 @@ namespace Mordor.Controllers
     [Authorize(Roles = "Admin")]
     public class RolesController : Controller
     {
-        private ApplicationContext db;
+        private readonly ApplicationContext _context;
         public RolesController(ApplicationContext context)
         {
-            db = context;
+            _context = context;
         }
         public ActionResult Index()
         {
-            var AppUsers = db.AppUsers
+            var AppUsers = _context.AppUsers
                 .Include(b => b.AppUserRole)
                 .ThenInclude(x => x.Role);
 
@@ -29,7 +29,7 @@ namespace Mordor.Controllers
 
         public ActionResult Details(int id = 0)
         {
-            AppUser student = db.AppUsers.Find(id);
+            AppUser student = _context.AppUsers.Find(id);
             if (student == null)
             {
                 ModelState.AddModelError("", "Некорректные логин и(или) пароль");
@@ -39,7 +39,7 @@ namespace Mordor.Controllers
 
         protected override void Dispose(bool disposing)
         {
-            db.Dispose();
+            _context.Dispose();
             base.Dispose(disposing);
         }
        

@@ -25,16 +25,17 @@ namespace Mordor.Controllers
         {
             AdminPanelIndex var = new AdminPanelIndex
             {
-                RegistredUserCount = _context.AppUsers.Count()
+                RegistredUserCount = _context.AppUsers.Count(),
+                SectionsCount = _context.Sections.Count(),
+                PostsCount = _context.Posts.Count()
             };
-            //var.PostsCount = _context.Posts.count();
             return View(var);
         }
 
         [HttpGet]
-        public IActionResult UserList()
+        public async Task<IActionResult> UserList()
         {
-            return View(_context.GetUserListAsync());
+            return View( await _context.GetUserListAsync());
         }
 
         // GET: Admin/Details/5
